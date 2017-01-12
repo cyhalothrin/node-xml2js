@@ -36,7 +36,7 @@ class Collector {
     // text = text.trim();
 
     // if (text.length) {
-      this.last()[this.charKey] = text;
+    this.last()[this.charKey] = text;
     // }
   }
   last() {

@@ -5,8 +5,7 @@ function isStream(stream) {
   return stream !== null && typeof stream === 'object' && typeof stream.pipe === 'function';
 }
 
-module.exports = function parse(source, fn) {
-  const options = { xmlMode: true };
+module.exports = function parse(source, fn, options = { xmlMode: true }) {
   const collector = new Collector();
   const parser = new htmlparser.Parser({
     onopentag(name) {
@@ -23,6 +22,7 @@ module.exports = function parse(source, fn) {
     },
   }, options);
 
+  // Buffer.toString() ?
   if (typeof source === 'string') {
     parser.write(source);
     parser.end();
