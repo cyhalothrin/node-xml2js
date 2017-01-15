@@ -1,69 +1,28 @@
 const test = require('tape');
-const Collector = require('../Collector');
+const parse = require('../index');
 
 
 function setup() {
-  return new Collector();
+  return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:sam="http://www.example.org/sample/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <sam:searchResponse>
+          <sam:searchResponse>
+              <item><id>1234</id><description><![CDATA[<item><width>123</width><height>345</height>
+  <length>098</length><isle>A34</isle></item>]]></description><price>123</price>
+              </item>
+          </sam:searchResponse>
+        </sam:searchResponse>
+    </soapenv:Body>
+  </soapenv:Envelope>
+  `;
 }
 
-test('collector test', t => {
-  const collector = setup();
-  const expected = {
-    catalog: {
-      $: {},
-      _: '',
-      cd: [
-        {
-          $: {},
-          _: '',
-          title: {
-            $: {},
-            _: 'Empire Burlesque',
-          },
-          artist: {
-            $: {},
-            _: 'Bob Dylan',
-          },
-        },
-        {
-          $: {},
-          _: '',
-          title: {
-            $: {},
-            _: 'Hide your heart',
-          },
-          artist: {
-            $: {},
-            _: 'Bonnie Tyler',
-          },
-        },
-      ],
-    },
-  };
-
-  collector.open('catalog');
-
-  collector.open('cd');
-  collector.open('title');
-  collector.text('Empire Burlesque');
-  collector.close('title');
-  collector.open('artist');
-  collector.text('Bob Dylan');
-  collector.close('artist');
-  collector.close('cd');
-
-  collector.open('cd');
-  collector.open('title');
-  collector.text('Hide your heart');
-  collector.close('title');
-  collector.open('artist');
-  collector.text('Bonnie Tyler');
-  collector.close('artist');
-  collector.close('cd');
-
-  collector.close('catalog');
-
-  t.deepEqual(collector.obj, expected);
-
-  t.end();
+test('parse test', (t) => {
+  const xml = setup();
+  parse(xml, (err, res) => {
+    console.log(res['soapenv:Envelope']['soapenv:Body']['sam:searchResponse']['sam:searchResponse']);
+    t.end();
+  });
 });
