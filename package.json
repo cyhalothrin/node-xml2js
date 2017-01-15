@@ -1,19 +1,17 @@
 {
-  "name": "xml-stream-parser",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@cyhalothrin/node-xml2js",
+  "version": "0.1.0",
+  "description": "This package converts xml string or stream to js object",
   "main": "index.js",
   "scripts": {
     "test": "node test/index.js",
     "eslint": "eslint src/** index.js test/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["xml", "json", "stream"],
+  "author": "Yerlan Amanzhol <amanzhol.e@gmail.com>",
+  "license": "MIT",
   "dependencies": {
-    "event-stream": "^3.3.4",
-    "htmlparser2": "^3.9.2",
-    "lodash": "^4.17.2"
+    "htmlparser2": "^3.9.2"
   },
   "devDependencies": {
     "eslint": "^3.13.0",
