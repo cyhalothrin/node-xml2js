@@ -1,28 +1,62 @@
 const test = require('tape');
 const parse = require('../index');
 
-
 function setup() {
-  return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:sam="http://www.example.org/sample/">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <sam:searchResponse>
-          <sam:searchResponse>
-              <item><id>1234</id><description><![CDATA[<item><width>123</width><height>345</height>
-  <length>098</length><isle>A34</isle></item>]]></description><price>123</price>
-              </item>
-          </sam:searchResponse>
-        </sam:searchResponse>
-    </soapenv:Body>
-  </soapenv:Envelope>
-  `;
+  return `<?xml version="1.0" encoding="UTF-8"?>
+  <playlist name="thrash metal">
+    <album>
+      <name>Kill 'Em All</name>
+      <artist>Metallica</artist>
+      <trackList>
+        <song length="3:08" position="3">Motorbreath</song>
+        <song length="6:55" position="9">Seek &amp; Destroy</song>
+      </trackList>
+      <cover><![CDATA[<img src="http://playlist.com/covers/kill-em-all-main.jpg">]]></cover>
+    </album>
+  </playlist>`;
 }
 
 test('parse test', (t) => {
   const xml = setup();
+  const expected = {
+    _: '',
+    playlist: {
+      $: { name: 'thrash metal' },
+      _: '',
+      album: {
+        $: {},
+        _: '',
+        name: {
+          $: {},
+          _: 'Kill \'Em All',
+        },
+        artist: {
+          $: {},
+          _: 'Metallica',
+        },
+        trackList: {
+          $: {},
+          _: '',
+          song: [
+            {
+              $: { length: '3:08', position: '3' },
+              _: 'Motorbreath',
+            },
+            {
+              $: { length: '6:55', position: '9' },
+              _: 'Seek &amp; Destroy',
+            },
+          ],
+        },
+        cover: {
+          $: {},
+          _: '<img src="http://playlist.com/covers/kill-em-all-main.jpg">',
+        },
+      },
+    },
+  };
   parse(xml, (err, res) => {
-    console.log(res['soapenv:Envelope']['soapenv:Body']['sam:searchResponse']['sam:searchResponse']);
+    t.deepEquals(res, expected);
     t.end();
   });
 });

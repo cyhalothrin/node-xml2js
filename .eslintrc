@@ -1,7 +1,5 @@
 {
     "extends": "airbnb-base",
-    "plugins": [],
-    "rules": {},
     "env": {
         "node": true
     }
