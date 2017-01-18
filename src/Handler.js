@@ -1,7 +1,7 @@
 class Handler {
   constructor(callback, options) {
     this.callback = callback;
-    this.obj = {};
+    this.obj = { _: '' };
     this.stack = [this.obj];
     const defaultOptions = {
       normalizeWhitespace: true,
@@ -28,10 +28,11 @@ class Handler {
     this.stack.pop();
   }
   ontext(text) {
+    const last = this.last();
     if (this.options.normalizeWhitespace) {
-      this.last()._ = text.replace(/\s+/g, ' ').trim();
+      last._ += text.replace(/\s+/g, ' ').trim();
     } else {
-      this.last()._ = text;
+      last._ += text;
     }
   }
   onend() {
