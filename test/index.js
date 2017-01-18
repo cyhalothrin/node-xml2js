@@ -1,23 +1,10 @@
 const test = require('tape');
+const fs = require('fs');
 const parse = require('../index');
 
-function setup() {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-  <playlist name="thrash metal">
-    <album>
-      <name>Kill 'Em All</name>
-      <artist>Metallica</artist>
-      <trackList>
-        <song length="3:08" position="3">Motorbreath</song>
-        <song length="6:55" position="9">Seek &amp; Destroy</song>
-      </trackList>
-      <cover><![CDATA[<img src="http://playlist.com/covers/kill-em-all-main.jpg">]]></cover>
-    </album>
-  </playlist>`;
-}
-
 test('parse test', (t) => {
-  const xml = setup();
+  const filename = `${__dirname}/_data/data.xml`;
+  const xmlString = fs.readFileSync(filename).toString();
   const expected = {
     _: '',
     playlist: {
@@ -52,10 +39,20 @@ test('parse test', (t) => {
           $: {},
           _: '<img src="http://playlist.com/covers/kill-em-all-main.jpg">',
         },
+        description: {
+          $: {},
+          _: 'Kill \'Em All is the debut studio album by the American heavy metal band Metallica, '
+          + 'released on July 25, 1983, by the independent record label Megaforce Records.',
+        },
       },
     },
   };
-  parse(xml, (err, res) => {
+  parse(xmlString, (err, res) => {
+    t.deepEquals(res, expected);
+  });
+
+  const xmlStream = fs.createReadStream(filename);
+  parse(xmlStream, (err, res) => {
     t.deepEquals(res, expected);
     t.end();
   });
