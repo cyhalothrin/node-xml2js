@@ -25,12 +25,13 @@ module.exports = function parse(source, options, callback) {
   }
 
   const handler = new Handler(handlerCallback, handlerOptions);
-  const parser = new htmlparser.Parser(handler, parserOptions);
 
   if (typeof source === 'string') {
+    const parser = new htmlparser.Parser(handler, parserOptions);
     parser.write(source);
     parser.end();
   } else if (isStream(source)) {
+    const parser = new htmlparser.WritableStream(handler, parserOptions);
     source.pipe(parser);
   } else {
     throw new Error('Source should be Readable stream or String');
