@@ -7,7 +7,7 @@ const parse = require('node-xml2js');
 
 const xml = '<tag attr="value">Hello, world!</tag>'; 
 
-parse(xml, (obj) => {
+parse(xml, (err, obj) => {
   console.log(obj);
 });
 
