@@ -12,16 +12,20 @@ module.exports = function parse(source, options, callback) {
 
   if (typeof options === 'function') {
     handlerCallback = options;
-  } else if (typeof options === 'object') {
+  } else if (options !== null && typeof options === 'object') {
     handlerCallback = callback;
     const handlerOptionsKeys = ['normalizeWhitespace'];
-    handlerOptionsKeys.forEach((key) => {
+    for (const key in options) {
       if (Object.prototype.hasOwnProperty.call(options, key)) {
-        handlerOptions[key] = options[key];
-      } else {
-        parserOptions[key] = options[key];
+        if (handlerOptionsKeys.indexOf(key) !== -1) {
+          handlerOptions[key] = options[key];
+        } else {
+          parserOptions[key] = options[key];
+        }
       }
-    });
+    }
+  } else {
+    throw new Error('Second argument should be Object or callable');
   }
 
   const handler = new Handler(handlerCallback, handlerOptions);

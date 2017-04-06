@@ -30,7 +30,7 @@ class Handler {
   ontext(text) {
     const last = this.last();
     if (this.options.normalizeWhitespace) {
-      last._ += text.replace(/\s+/g, ' ').trim();
+      last._ += text.replace(/\s+/g, ' ');
     } else {
       last._ += text;
     }
